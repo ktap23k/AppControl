@@ -5,8 +5,7 @@ from time import sleep
 def motor(pin1, pin2, enable):
     pin1 = Pin(pin1, Pin.OUT)    
     pin2 = Pin(pin2, Pin.OUT)      
-    dc_motor = DCMotor(pin1, pin2, enable)
-    dc_motor = DCMotor(pin1, pin2, enable, 350, 1023)
+    dc_motor = DCMotor(pin1, pin2, enable, 750, 1023)
     return dc_motor
 
 enable = PWM(Pin(5), 15000)
@@ -22,7 +21,7 @@ def forward(speed):
     motor3.forward(speed)
     motor4.forward(speed)
 
-def backwards(speed):
+def backward(speed):
     motor1.backwards(speed)
     motor2.backwards(speed)
     motor3.backwards(speed)
@@ -40,13 +39,13 @@ def r_forward(speed):
     motor1.forward(speed)
     motor2.forward(speed)
 
-def l_backwards(speed):
+def l_backward(speed):
     motor1.backwards(speed//4)
     motor2.backwards(speed//4)
     motor3.backwards(speed)
     motor4.backwards(speed)
     
-def r_backwards(speed):
+def r_backward(speed):
     motor3.backwards(speed//4)
     motor4.backwards(speed//4)
     motor1.backwards(speed)
@@ -63,6 +62,25 @@ def right(speed):
     motor4.stop()
     motor1.forward(speed)
     motor2.forward(speed)
+    
+def move_left(speed):
+    motor2.forward(speed)
+    motor1.backwards(speed)
+    motor4.backwards(speed)
+    motor3.forward(speed)
+    
+def move_right(speed):
+    motor1.forward(speed)
+    motor2.backwards(speed)
+    motor3.backwards(speed)
+    motor4.forward(speed)
+
+def spin(speed):
+    motor1.backwards(speed)
+    motor2.backwards(speed)
+    
+    motor3.forward(speed)
+    motor4.forward(speed)
 
 def left_(speed):
     motor1.stop()
@@ -75,7 +93,12 @@ def right_(speed):
     motor4.stop()
     motor1.backwards(speed)
     motor2.backwards(speed)
-    
+
+def stop():
+    motor1.stop()
+    motor2.stop()
+    motor3.stop()
+    motor4.stop()
 def to_left(speed):
     pass
 

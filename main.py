@@ -55,8 +55,24 @@ from random import randint
 
 ws = AsyncWebsocketClient(5)
 
+def barrier(sensor1, sensor2, sensor3, sensor4, ws):
+    async def send_data(ws):
+        while True:
+            try:
+                sau = sensor1.distance_cm()
+                phai = sensor2.distance_cm()
+                truoc = sensor3.distance_cm()
+                trai = sensor4.distance_cm()
+                time.sleep(0.5)
+                if ws is not None:
+                    if await ws.open():
+                        await ws.send(f"{sau} {phai} {truoc} {trai}")
+                        #print('send: ', distance1, distance2, distance3, distance4)
+            except Exception as e:
+                print('error: ',e)
         
-#_thread.start_new_thread(barrier, (sensor1, sensor2, sensor3, sensor4,))
+    loop = a.get_event_loop()
+    loop.run_until_complete(send_data(ws))
 
 async def connect():
     check = ''
@@ -65,12 +81,13 @@ async def connect():
     if not await ws.handshake("{}{}".format('ws://14.225.254.142:2024/', 12345)):
         raise Exception('Handshake error.')
     blink_led(pin, 2)
+    _thread.start_new_thread(barrier, (sensor1, sensor2, sensor3, sensor4, ws, ))
+    
     print('check')
     while True:
         try:
             if ws is not None:
                 if await ws.open():
-                    #await ws.send()
                     data = await ws.recv()
                     if data:
                         if str(data) == '{"data": "forward"}' and check != '{"data": "forward"}':
@@ -150,5 +167,4 @@ async def connect():
         
     print("...handshaked.")
     
-#a.run(connect())
-
+a.run(connect())

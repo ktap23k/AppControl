@@ -1,4 +1,4 @@
-import machine, time
+import machine, utime
 from machine import Pin
 
 __version__ = '0.2.0'
@@ -32,10 +32,10 @@ class HCSR04:
         We use the method `machine.time_pulse_us()` to get the microseconds until the echo is received.
         """
         self.trigger.value(0) # Stabilize the sensor
-        time.sleep_us(5)
+        utime.sleep_us(5)
         self.trigger.value(1)
         # Send a 10us pulse.
-        time.sleep_us(10)
+        utime.sleep_us(10)
         self.trigger.value(0)
         try:
             pulse_time = machine.time_pulse_us(self.echo, 1, self.echo_timeout_us)
@@ -70,5 +70,5 @@ class HCSR04:
         # (the pulse walk the distance twice) and by 29.1 becasue
         # the sound speed on air (343.2 m/s), that It's equivalent to
         # 0.034320 cm/us that is 1cm each 29.1us
-        cms = (pulse_time / 2) / 29.1
+        cms = (pulse_time / 2) / 29.1 if pulse_time > 1 else -1
         return cms
