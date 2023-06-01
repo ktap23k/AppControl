@@ -1,4 +1,6 @@
-# AppControl
+# Esp32 and Esp32 Cam with micropython
+Using Esp32 control car and create connect websocket.
+Using Esp32Cam stream video.
 
 ## Folder
 The Esp32Cam folder contains the code and firmware for the esp32 cam, you need to install the firmware for the esp32 cam first to be able to run micropython.
